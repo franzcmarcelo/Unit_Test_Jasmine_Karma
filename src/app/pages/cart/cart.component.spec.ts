@@ -33,10 +33,14 @@ const totalPriceMock = 150;
 
 
 describe('Cart component', () => {
+
+  // COMPONENT
   let component: CartComponent;
+  // Fixture para debugging y testear un componente
   // Nos permite extraer el servicio de nuestro componente (book.service)
   let fixture: ComponentFixture<CartComponent>;
 
+  // SERVICES
   let bookService: BookService;
 
 
@@ -44,6 +48,7 @@ describe('Cart component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Modulos que se usan (p.e.:angularMaterial)
+      // tanto en nuestro component como los providers
       imports: [
         // para simular las peticiones http
         HttpClientTestingModule
@@ -62,11 +67,6 @@ describe('Cart component', () => {
       ]
     }).compileComponents()
   });
-
-  // ngOnInit(): void {
-  //   this.listCartBook = this._bookService.getBooksFromCart();
-  //   this.totalPrice = this.getTotalPrice(this.listCartBook);
-  // }
 
   // Instanciamos el component
   beforeEach(() => {

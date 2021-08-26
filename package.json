@@ -9,7 +9,7 @@
     "test-coverage": "ng test --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "back": "json-server --watch db.json"
+    "backend": "json-server --watch db.json"
   },
   "private": true,
   "dependencies": {
