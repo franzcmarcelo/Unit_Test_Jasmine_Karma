@@ -11,25 +11,25 @@ const listCartBookMock: Book[] = [
     name: '',
     author: '',
     isbn: '',
-    amount: 2,
+    amount: 4,
     price: 12
   },
   {
     name: '',
     author: '',
     isbn: '',
-    amount: 1,
+    amount: 3,
     price: 20
   },
   {
     name: '',
     author: '',
     isbn: '',
-    amount: 3,
+    amount: 7,
     price: 6
   }
 ]
-const totalPriceMock = 62;
+const totalPriceMock = 150;
 
 
 describe('Cart component', () => {
@@ -63,6 +63,11 @@ describe('Cart component', () => {
     }).compileComponents()
   });
 
+  // ngOnInit(): void {
+  //   this.listCartBook = this._bookService.getBooksFromCart();
+  //   this.totalPrice = this.getTotalPrice(this.listCartBook);
+  // }
+
   // Instanciamos el component
   beforeEach(() => {
     // Extraemos el componente del TestBed
@@ -72,10 +77,12 @@ describe('Cart component', () => {
     // El component estará entrando y hará lo que tenga que hacer en su método ngOnInit()
     fixture.detectChanges();
 
+    // Declaración de nuestro servicio _bookService (private):
     bookService = fixture.debugElement.injector.get(BookService)
-  });
 
-  // LOS TEST (it) NO SE LANZAN EN ORDEN
+    // para las instrucciones dentro del método ngOnInit()
+    spyOn(bookService, 'getBooksFromCart').and.callFake(()=>null)
+  });
 
   // Comprobamos que el component se ha creado correctamente
   it('should create', () => {
@@ -146,5 +153,32 @@ describe('Cart component', () => {
     expect(getTotalPriceSpy).toHaveBeenCalled()
     expect(book.amount).toEqual(1)
   });
-})
 
+  // TEST MÉTODO PRIVADO
+  // La única forma de testearlo correctamente, es testeando desde el método público que lo llama
+  it('Test for onClearBooks() when listCartBook.length > 0', () => {
+    // spy método privado
+    const _clearListCartBookSpy = spyOn((component as any), '_clearListCartBook').and.callThrough()
+    const removeBooksFromCartSpy = spyOn(bookService, 'removeBooksFromCart').and.callFake(()=>null)
+    component.listCartBook = listCartBookMock;
+
+    component.onClearBooks()
+
+    expect(_clearListCartBookSpy).toHaveBeenCalled()
+    expect(component.listCartBook.length).toEqual(0)
+    expect(removeBooksFromCartSpy).toHaveBeenCalled()
+
+  });
+  // Otra forma, no recomendada es:
+  it('Test for _clearListCartBook()', () => {
+    const removeBooksFromCartSpy = spyOn(bookService, 'removeBooksFromCart').and.callFake(()=>null)
+    component.listCartBook = listCartBookMock;
+
+    // llamada método privado
+    component['_clearListCartBook']()
+
+    expect(component.listCartBook.length).toEqual(0)
+    expect(removeBooksFromCartSpy).toHaveBeenCalled()
+  });
+
+})
