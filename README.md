@@ -59,7 +59,7 @@ describe('Home Component', () => {
       // tanto en nuestro component como los providers
       imports:[
       ],
-      // componentes que utilzamos en nuestro test
+      // componentes que utilzamos en nuestro test, pipesMocks
       declarations:[
         MyComponent
       ],
@@ -101,37 +101,45 @@ describe('Home Component', () => {
 Creamos un spy para method, este rastreará todas sus llamadas.
 
 ```
-const methodSpy = spyOn(<component or service>, '<method>').
+const methodSpy = spyOn(<component or service>, '<method>')
 ```
-`<component or service>` donde se instalará el spy
-`<method>` que se reemplazará por el spy
+* `<component or service>` donde se instalará el spy
+* `<method>` que se reemplazará por el spy
 
 Al encadenar el spy con:
 
 *   `.and.callFake()`
-
-
-    todas las llamadas al spy (método rastreado) se delegarán en la función proporcionada
-
+    Todas las llamadas al spy (método rastreado) se delegarán en la función proporcionada
     ```
     spyOn(componentOrService, 'método').and.callFake(()=>{})
     ```
 
 *   `.and.callThrough()`
-
-    todas las llamadas al espía (método rastreado) se delegarán en la implemetación real
-
+    Todas las llamadas al espía (método rastreado) se delegarán en la implemetación real
     ```
     spyOn(componentOrService, 'método').and.callThrough()
     ```
 
 *   `.and.returnValue(of(listBooksMock))`
+    Las llamadas a la función devolverán un valor específico.
 
-    las llamadas a la función devolverán un valor específico.
+#
 
+# Test for Pipes
 
-    y además: estas llamadas al espía (método rastreado) se delegarán en la implemetación real
+```typescript
+@Pipe({name: 'myPipe'})
+class MyPipeMock implements PipeTransform {
+  transform(): any{
+    ...
+  }
+}
 
-    ```
-    spyOn(componentOrService, 'método').and.callThrough()
-    ```
+describe('My Component', () => {
+  ...
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      ...
+      declarations:[
+        MyPipeMock
+```
