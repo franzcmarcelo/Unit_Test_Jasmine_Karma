@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CartComponent } from './cart.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from "@angular/platform-browser";
+
+import { CartComponent } from './cart.component';
 import { BookService } from '../../services/book.service';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { Book } from 'src/app/models/book.model';
 
 // Solo añadimos los obligatorios y los que vamos a necesitar
@@ -179,6 +181,35 @@ describe('Cart component', () => {
 
     expect(component.listCartBook.length).toEqual(0)
     expect(removeBooksFromCartSpy).toHaveBeenCalled()
+  });
+
+  // EJ: TEST DE INTEGRACIÓN
+  describe('Title "The cart is empty" on tag <h5>', () => {
+
+    it('Title is not displayed, when there is a listCartBook', () => {
+      component.listCartBook = listCartBookMock
+      // como hubo el cambio anterior, tenemos que actualizar la vista
+      fixture.detectChanges()
+
+      const htmlElement : DebugElement = fixture.debugElement.query(By.css('#titleCartEmpty'))
+      // para mas de un elemento queryAll, devuele un array los elementos
+
+      expect(htmlElement).toBeFalsy()
+    });
+
+    it('Title is displayed, when the listCartBook is empty', () => {
+      component.listCartBook = []
+      fixture.detectChanges()
+
+      const debugElement : DebugElement = fixture.debugElement.query(By.css('#titleCartEmpty'))
+
+      expect(debugElement).toBeTruthy()
+      if(debugElement){
+        const htmlElement: HTMLElement =  debugElement.nativeElement
+
+        expect(htmlElement.innerHTML).toContain("The cart is empty")
+      }
+    });
   });
 
 })
