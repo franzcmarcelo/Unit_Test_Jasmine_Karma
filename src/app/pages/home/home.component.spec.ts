@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, Pipe, PipeTransform } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { BookService } from "src/app/services/book.service";
 import { HomeComponent } from "./home.component";
@@ -30,6 +30,14 @@ const listBooksMock: Book[] = [
   }
 ]
 
+@Pipe({name: 'reduceText'})
+class ReduceTextPipeMock implements PipeTransform {
+  transform(): string{
+    return '';
+  }
+}
+
+
 describe('Home Component', () => {
   let homeComponent: HomeComponent
   let fixture: ComponentFixture<HomeComponent>
@@ -42,7 +50,8 @@ describe('Home Component', () => {
         HttpClientTestingModule
       ],
       declarations:[
-        HomeComponent
+        HomeComponent,
+        ReduceTextPipeMock
       ],
       providers:[
         // Para cuando se mockea a través de los spies:
@@ -92,6 +101,7 @@ describe('Home Component', () => {
     expect(homeComponent.listBook.length).toEqual(3)
   });
 
+
   // MOCK DE UN SERVICIO (MOCKEAR LOS METODOS DE SERVICIOS)
   // Para cuando se desea mockear desde el provider:
   // ventaja: ya no es necesario crear un spy para simular el comportamiento del metodo
@@ -111,4 +121,5 @@ describe('Home Component', () => {
 
     expect(homeComponent.listBook.length).toEqual(3)
   });
+
 });
