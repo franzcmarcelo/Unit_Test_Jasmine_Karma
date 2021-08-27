@@ -25,6 +25,8 @@ export class HomeComponent implements OnInit {
   }
 
   public getBooks(): void {
+    // .pipe(take(1)) -> se subscribe solo una vez,
+    // no cada vez que entrase en el ngOnInit()
     this.bookService.getBooks().pipe(take(1)).subscribe((resp: Book[]) => {
       this.listBook = resp;
     });

@@ -85,7 +85,7 @@ describe('Cart component', () => {
   });
 
   // Comprobamos que el component se ha creado correctamente
-  it('should create', () => {
+  it('should create Cart component', () => {
     expect(component).toBeTruthy();
   });
 
