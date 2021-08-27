@@ -40,6 +40,9 @@ http://localhost:3000
 
 #
 
+
+
+
 # Unit Test Base
 
 ```typescript
@@ -96,6 +99,9 @@ describe('Home Component', () => {
 
 #
 
+
+
+
 # Spies
 
 Creamos un spy para method, este rastreará todas sus llamadas.
@@ -124,6 +130,90 @@ Al encadenar el spy con:
     Las llamadas a la función devolverán un valor específico.
 
 #
+
+
+
+
+# Test to Services (.service.spect.ts)
+
+```typescript
+import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from "@angular/core/testing";
+
+describe('', () => {
+  let myService: MyService
+
+  // Para simular las petciciones http
+  let httpTestingController: HttpTestingController
+
+  // Para simular el Local Storage
+  let localStorageMock = {}
+
+  // CONFIGURACIÓN
+  beforeEach(()=>{
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [
+        MyService
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA,
+        NO_ERRORS_SCHEMA
+      ]
+    }); // No hace falta el .compileComponents porque no es un componente, sino un servicio
+  })
+
+  // INSTANCIAS
+  beforeEach(() => {
+    myService = TestBed.inject(MyService)
+
+    httpTestingController = TestBed.inject(HttpTestingController)
+
+    localStorageMock = {}
+    // Spy for localStorage (alteramos los metodos get y set del localStorage)
+    spyOn(localStorage, 'getItem').and.callFake(( key :string) => {
+      return localStorageMock[key] ? localStorageMock[key] : null;
+    })
+    spyOn(localStorage, 'setItem').and.callFake(( key :string, value :string) => {
+      return localStorageMock[key] = value
+    })
+  });
+
+  afterAll(()=>{
+    // Verifica que no haya peticiones pendientes entre cada test
+    httpTestingController.verify()
+  })
+
+  it('should be created MyService', () => {
+    expect(myService).toBeTruthy()
+  });
+
+  it('Test for susciption verify response and GET method', () => {
+
+    // Test for request data (salta con .flush(response))
+    myService.getBooks().subscribe((resp: Book[]) => {
+      expect(resp).toEqual(listBooksMock);
+    })
+
+    // Test for request info
+    // expectOne, espera que se haya realizado una sola solicitud
+    // que coincida con la URL dada
+    const requestGetProducts = httpTestingController.expectOne(`my_url_api/data`);
+    expect(requestGetProducts.request.method).toBe('GET')
+
+    // Hasta este momento el request no manda nada
+    // Liberamos el response mockeado:
+    requestGetProducts.flush(listBooksMock)
+    // Al liberar el response, la suscripción que tenemos al método getBooks()
+    // va a saltar y se comprobará el expect descrito ahí
+  });
+```
+
+
+
 
 # Test for Pipes
 

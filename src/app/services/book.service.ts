@@ -54,15 +54,17 @@ export class BookService {
 
   public updateAmountBook(book: Book): Book[] {
     const listBookCart = this.getBooksFromCart();
+
     const index = listBookCart.findIndex((item: Book) => {
       return book.id === item.id;
     });
-    if (index !== -1) {
+
+    if (book.amount === 0) {
+      listBookCart.splice(index, 1);
+    } else{
       listBookCart[index].amount = book.amount;
-      if (book.amount === 0) {
-        listBookCart.splice(index, 1);
-      }
     }
+
     localStorage.setItem('listCartBook', JSON.stringify(listBookCart));
     return listBookCart;
   }
