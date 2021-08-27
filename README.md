@@ -98,11 +98,20 @@ describe('Home Component', () => {
 
 # Spies
 
+Creamos un spy para method, este rastreará todas sus llamadas.
+
+```
+const methodSpy = spyOn(<component or service>, '<method>').
+```
+`<component or service>` donde se instalará el spy
+`<method>` que se reemplazará por el spy
+
+Al encadenar el spy con:
+
 *   `.and.callFake()`
 
-    Creamos un espía para método, este rastreará todas las llamdas.
 
-    Y además: estas llamadas al espía (método rastreado) se delegarán en la función proporcionada
+    todas las llamadas al spy (método rastreado) se delegarán en la función proporcionada
 
     ```
     spyOn(componentOrService, 'método').and.callFake(()=>{})
@@ -110,11 +119,19 @@ describe('Home Component', () => {
 
 *   `.and.callThrough()`
 
-    Creamos un espía para método, este rastreará todas las llamdas.
+    todas las llamadas al espía (método rastreado) se delegarán en la implemetación real
+
+    ```
+    spyOn(componentOrService, 'método').and.callThrough()
+    ```
+
+*   `.and.returnValue(of(listBooksMock))`
+
+    las llamadas a la función devolverán un valor específico.
+
 
     y además: estas llamadas al espía (método rastreado) se delegarán en la implemetación real
 
     ```
     spyOn(componentOrService, 'método').and.callThrough()
     ```
-
