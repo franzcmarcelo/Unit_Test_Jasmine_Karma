@@ -43,7 +43,7 @@ http://localhost:3000
 
 
 
-# Unit Test Base
+# Unit Test Base (Component)
 
 ```typescript
 import { ComponentFixture, TestBed } from "@angular/core/testing";
@@ -51,8 +51,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe('Home Component', () => {
   let myComponent: MyComponent
-  // Fixture para debugging y testear un componente
-  let fixture: ComponentFixture<MyComponent>
+  // componentfixture para debugging y testear un componente
+  let componentfixture: ComponentFixture<MyComponent>
 
   let myService: MyService
 
@@ -80,15 +80,19 @@ describe('Home Component', () => {
   // Instanciamos el component
   beforeEach(() => {
     // Extraemos el componente del TestBed
-    fixture = TestBed.createComponent(MyComponent)
+    componentfixture = TestBed.createComponent(MyComponent)
     // Instanciamos el componente
-    myComponent = fixture.componentInstance
-    // El component estará entrando y hará lo que tenga que hacer en su método ngOnInit()
-    fixture.detectChanges()
+    myComponent = componentfixture.componentInstance
+    
+    // La detección retardada de cambios es intencionada y útil.
+    // Le da al tester la oportunidad de inspeccionar y cambiar el estado del componente
+    // antes de que Angular inicie el enlace de datos y llame a los hooks del ciclo de vida.
+    // Tener cuidado cuando nuestros componentes usan: EventEmitter o Output
+    componentfixture.detectChanges()
 
 
     // Declaración de un  servicio
-    myService = fixture.debugElement.injector.get(MyService)
+    myService = componentfixture.debugElement.injector.get(MyService)
   });
 
   it('Should create', () => {
@@ -134,7 +138,7 @@ Al encadenar el spy con:
 
 
 
-# Test to Services (.service.spect.ts)
+# Test to Services
 
 ```typescript
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
@@ -191,7 +195,9 @@ describe('', () => {
     expect(myService).toBeTruthy()
   });
 
-  it('Test for susciption verify response and GET method', () => {
+  it('should getBooks, checking response and GET method', () => {
+    const dataParamMock = ''
+    const URL = environment.api + dataParamMock;
 
     // Test for request data (salta con .flush(response))
     myService.getBooks().subscribe((resp: Book[]) => {
@@ -201,7 +207,7 @@ describe('', () => {
     // Test for request info
     // expectOne, espera que se haya realizado una sola solicitud
     // que coincida con la URL dada
-    const requestGetProducts = httpTestingController.expectOne(`my_url_api/data`);
+    const requestGetProducts = httpTestingController.expectOne(URL);
     expect(requestGetProducts.request.method).toBe('GET')
 
     // Hasta este momento el request no manda nada
