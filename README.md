@@ -130,8 +130,8 @@ Al encadenar el spy con:
     spyOn(componentOrService, 'método').and.callThrough()
     ```
 
-*   `.and.returnValue(of(listBooksMock))`
-    Las llamadas a la función devolverán un valor específico.
+*   `.and.returnValue(of(listBooksMock) || listBooksMock)`
+    Las llamadas a la función devolverán un valor específico. of: solo para observables
 
 #
 
