@@ -120,6 +120,7 @@ Al encadenar el spy con:
 
 *   `.and.callFake()`
     Todas las llamadas al spy (método rastreado) se delegarán en la función proporcionada
+    (los parametros siguen siendo los mismo que llegan en la implemetación real)
     ```
     spyOn(componentOrService, 'método').and.callFake(()=>{})
     ```
