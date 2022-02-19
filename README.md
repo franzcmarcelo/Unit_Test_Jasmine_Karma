@@ -110,6 +110,7 @@ describe('Home Component', () => {
 
 Creamos un spy para method, este rastreará todas sus llamadas.
 
+`spyOn()` reemplazará la llamada con un código auxiliar que solo puede confirmar que fue llamado y/o llamado con argumentos específicos.
 ```
 const methodSpy = spyOn(<component or service>, '<method>')
 ```
